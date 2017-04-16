@@ -9,7 +9,13 @@ var WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeMod
 var getClientEnvironment = require('./env');
 var paths = require('./paths');
 
-
+var path = require('path')
+var cssnext = require('postcss-cssnext')
+var ant = require('postcss-ant')
+var fontMagician = require('postcss-font-magician');
+var nested = require('postcss-nested')
+var objectFit = require('postcss-object-fit-images');
+var postcss_scss = require('postcss-scss')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -27,7 +33,7 @@ var env = getClientEnvironment(publicUrl);
 module.exports = {
   // You may want 'eval' instead if you prefer to see the compiled output in DevTools.
   // See the discussion in https://github.com/facebookincubator/create-react-app/issues/343.
-  devtool: 'cheap-module-source-map',
+  devtool: 'source-map',
   // These are the "entry points" to our application.
   // This means they will be the "root" imports that are included in JS bundle.
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
@@ -111,7 +117,7 @@ module.exports = {
           // Webpack 2 fixes this, but for now we include this hack.
           // https://github.com/facebookincubator/create-react-app/issues/1713
           /\.(js|jsx)(\?.*)?$/,
-          /\.css$/,
+          /\.p?css$/,
           /\.json$/,
           /\.svg$/
         ],
@@ -140,7 +146,7 @@ module.exports = {
       // In production, we use a plugin to extract that CSS to a file, but
       // in development "style" loader enables hot editing of CSS.
       {
-        test: /\.css$/,
+        test: /\.p?css$/,
         loader: 'style!css?importLoaders=1!postcss'
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
@@ -161,19 +167,23 @@ module.exports = {
       // Remember to add the new extension(s) to the "url" loader exclusion list.
     ]
   },
-  
-  // We use PostCSS for autoprefixing only.
+
   postcss: function() {
-    return [
-      autoprefixer({
-        browsers: [
-          '>1%',
-          'last 4 versions',
-          'Firefox ESR',
-          'not ie < 9', // React doesn't support IE8 anyway
+    return {
+      syntax: postcss_scss,
+      plugins: [
+        cssnext(),
+        nested,
+        objectFit,
+        ant(),
+        fontMagician({
+          variants: {
+            'Open Sans': {}
+          },
+          foundries: ['google']
+        })
         ]
-      }),
-    ];
+    }
   },
   plugins: [
     // Makes some environment variables available in index.html.
