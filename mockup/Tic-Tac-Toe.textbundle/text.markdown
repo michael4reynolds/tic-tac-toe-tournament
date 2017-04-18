@@ -2,12 +2,17 @@
 
 
 - User Stories
+![](assets/D3564743-204B-4F99-82CF-9EC4B57C3B2D.pdf)
 
 	- [ ] I can play a game of Tic Tac Toe with the computer.
 
+	- [ ] I can choose whether I want to play as X or O.
+
 	- [ ] My game will reset as soon as it's over so I can play again.
 
-	- [ ] I can choose whether I want to play as X or O.
+- Rules
+
+	- [Tic-Tac-Toe - Game Rules With Variants](https://www.thespruce.com/tic-tac-toe-game-rules-412170)
 
 - [ ] Settings
 
@@ -27,21 +32,21 @@
 
 	- onClick
 
+- Get blocking move
+
+- check winning combinations
+
+- timer - ?
+
 - Check valid move
 
 	- Box is empty
 
 	- Game is not finished
 
-- Get blocking move
-
 - move
 
 	- computer goes first - settings
-
-- check winning combinations
-
-- timer - ?
 
 - Images
 
