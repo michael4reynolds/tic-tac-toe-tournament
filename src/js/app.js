@@ -19,8 +19,12 @@ const board = [
 const squares = Array.from(document.querySelectorAll('.game span'))
 
 // Controller
+let nextPlayer = function () {
+  return currentPlayer === player1 ? player2 : player1
+}
+
 const changeTurn = () => {
-  currentPlayer = currentPlayer === player1 ? player2 : player1
+  currentPlayer = nextPlayer()
 }
 
 const placeMark = e => {
@@ -46,15 +50,29 @@ const delay = amount => new Promise(resolve => setTimeout(() => {
   resolve()
 }, amount))
 
-const checkForWin = () => combos.some(c =>
-  c.every(mark => board[mark] === currentPlayer.mark))
-
-const checkForDraw = () => moveCount === 9
-
-const legalMoves = () => board.reduce((a, e, i) => {
+const legalMoves = arr => arr.reduce((a, e, i) => {
   if (e === '') a.push(i)
   return a
 }, [])
+
+const checkForWin = () => combos.some(c =>
+  c.every(i => board[i] === currentPlayer.mark))
+
+const twoSquaresDone = player => combos.filter(c =>
+  c.filter(i => board[i] === player.mark).length === 2
+)
+
+const winningMoves = arr => {
+  return arr.reduce((a, e) => {
+    let emptySquare = e.filter(i => board[i] === '')[0]
+    if (emptySquare !== undefined) {
+      a.push(emptySquare)
+    }
+    return a
+  }, [])
+}
+
+const checkForDraw = () => moveCount === 9
 
 const moveLoop = async e => {
   if (e.target.innerText || waiting || gameOver) return
@@ -71,21 +89,30 @@ const moveLoop = async e => {
   changeTurn()
   waiting = true
   await delay(1200)
-  // todo: playWinningMove()
-  // todo: blockOpponent()
-  let legal = legalMoves()
-  log(legal)
-  play(legal[getRandomInt(0, legal.length)])
-  if (checkForWin()) {
+  let arr = twoSquaresDone(currentPlayer)
+  let winners = winningMoves(arr)
+  if (winners.length) {
+    play(winners[getRandomInt(0, winners.length)])
     gameOver = true
     log(currentPlayer.name, 'wins!!!')
-    return
+  } else {
+    arr = twoSquaresDone(nextPlayer())
+    let blocks = winningMoves(arr)
+    if (blocks.length) {
+      play(blocks[getRandomInt(0, blocks.length)])
+      changeTurn()
+      return
+    }
+    let legal = legalMoves(board)
+    play(legal[getRandomInt(0, legal.length)])
+    if (checkForWin()) {
+      gameOver = true
+      log(currentPlayer.name, 'wins!!!')
+    } else if (checkForDraw()) {
+      log('Draw!')
+    } else
+      changeTurn()
   }
-  if (checkForDraw()) {
-    log('Draw!')
-    return
-  }
-  changeTurn()
 }
 
 // Events
@@ -94,8 +121,7 @@ squares.forEach(el => el.onclick = moveLoop)
 // initialize
 function init() {
   try {
-    let legal = legalMoves()
-    log(legal)
+    let legal = legalMoves(board)
     play(legal[getRandomInt(0, legal.length)])
     changeTurn()
   } catch (e) {
