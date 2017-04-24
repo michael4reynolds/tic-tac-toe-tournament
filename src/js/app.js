@@ -13,6 +13,7 @@ const board = new Array(9).fill('')
 
 // View
 const squares = Array.from(document.querySelectorAll('.game span'))
+const playerStat = document.querySelector('.player')
 
 // Utilities
 const getRandomInt = (min, max) => {
@@ -49,9 +50,9 @@ const checkForDraw = () => moveCount === 9
 let checkGameOver = () => {
   let over = true
   if (checkForWin()) {
-    log(currentPlayer.name, 'wins!!!')
+    playerStat.innerText = `${currentPlayer.name} wins!!!`
   } else if (checkForDraw()) {
-    log('Draw!')
+    playerStat.innerText = `Tie game`
   } else {
     over = false
   }
@@ -91,7 +92,7 @@ const aiPlay = async () => {
   let winners = winningMoves(arr)
   if (winners.length) {
     play(winners[getRandomInt(0, winners.length)])
-    log(currentPlayer.name, 'wins!!!')
+    playerStat.innerText = `${currentPlayer.name} wins!!!`
   } else {
     arr = twoSquaresDone(nextPlayer())
     let blocks = winningMoves(arr)
@@ -109,6 +110,7 @@ const startNewGame = () => {
   currentPlayer = player1
   moveCount = 0
   gameOver = false
+  playerStat.innerText = 'New Game'
   wait(600).then(() => moveRandom())
 }
 
