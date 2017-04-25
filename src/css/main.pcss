@@ -100,11 +100,30 @@ header {
       justify-items: center;
       align-items: center;
       span {
-        border: 1px solid green;
         width: 100%;
         height: 100%;
         text-align: center;
         font-size: 2em;
+        &:nth-child(1), &:nth-child(3) {
+          border-bottom: 3px solid green;
+        }
+        &:nth-child(2) {
+          border-left: 3px solid green;
+          border-right: 3px solid green;
+          border-bottom: 3px solid green;
+        }
+        &:nth-child(5) {
+          border-left: 3px solid green;
+          border-right: 3px solid green;
+        }
+        &:nth-child(7), &:nth-child(9) {
+          border-top: 3px solid green;
+        }
+        &:nth-child(8) {
+          border-left: 3px solid green;
+          border-right: 3px solid green;
+          border-top: 3px solid green;
+        }
       }
     }
   }
