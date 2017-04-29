@@ -1,10 +1,10 @@
 import log, {hookConsoleLog} from 'stacklogger'
 
 // Model
-const player = (name, mark = 'O') => ({name, mark})
-const player1 = player('Hal', 'X')
-const player2 = player('Me', 'O')
-let currentPlayer = player1
+const player = (name, mark) => ({name, mark})
+let player1
+let player2
+let currentPlayer
 let moveCount = 0
 let waiting = false
 let gameOver = false
@@ -13,7 +13,8 @@ const board = new Array(9).fill('')
 
 // View
 const squares = Array.from(document.querySelectorAll('.game span'))
-const playerStat = document.querySelector('.player')
+const stats = document.querySelector('.player-stats')
+const btnStats = document.getElementById('apply-stats')
 
 // Utilities
 const getRandomInt = (min, max) => {
@@ -50,9 +51,9 @@ const checkForDraw = () => moveCount === 9
 let checkGameOver = () => {
   let over = true
   if (checkForWin()) {
-    playerStat.innerText = `${currentPlayer.name} wins!!!`
+    stats.innerText = `${currentPlayer.name} wins!!!`
   } else if (checkForDraw()) {
-    playerStat.innerText = `Tie game`
+    stats.innerText = `Tie game`
   } else {
     over = false
   }
@@ -92,7 +93,7 @@ const aiPlay = async () => {
   let winners = winningMoves(arr)
   if (winners.length) {
     play(winners[getRandomInt(0, winners.length)])
-    playerStat.innerText = `${currentPlayer.name} wins!!!`
+    stats.innerText = `${currentPlayer.name} wins!!!`
   } else {
     arr = twoSquaresDone(nextPlayer())
     let blocks = winningMoves(arr)
@@ -104,18 +105,27 @@ const aiPlay = async () => {
   }
 }
 
+const applyGameSettings = () => {
+  let mark = document.querySelector('[name=mark]:checked').value
+  log(mark)
+  player1 = player(document.getElementById('name').value, mark === 'X' ? 'X' : 'O')
+  player2 = player('Computer', mark === 'X' ? 'O' : 'X')
+}
+
 const startNewGame = () => {
   board.fill('')
   squares.forEach(el => el.innerText = '')
-  currentPlayer = player1
+  currentPlayer = document.querySelector('[name=mark]:checked').value === 'X' ? player1 : player2
   moveCount = 0
   gameOver = false
-  playerStat.innerText = 'New Game'
+  stats.innerText = 'New Game'
+  if (document.querySelector('[name=mark]:checked').value === 'X') return
   wait(600).then(() => moveRandom())
 }
 
 const moveLoop = async e => {
   if (gameOver) {
+    applyGameSettings()
     await startNewGame()
     return
   }
@@ -128,10 +138,16 @@ const moveLoop = async e => {
 
 // Events
 squares.forEach(el => el.onclick = moveLoop)
+btnStats.addEventListener('click', e => {
+  e.preventDefault()
+  applyGameSettings()
+  startNewGame()
+})
 
 // initialize
 function init() {
   try {
+    applyGameSettings()
     startNewGame()
   } catch (e) {
     log(e)
