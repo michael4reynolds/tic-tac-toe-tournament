@@ -1,64 +1,66 @@
 # Tic-Tac-Toe
 
 
-- User Stories
-![](assets/D3564743-204B-4F99-82CF-9EC4B57C3B2D.pdf)
+## User Stories
+![](assets/3B89B2B8-F18C-400B-B8FB-14A419F944CB.pdf)
 
-	- [ ] I can play a game of Tic Tac Toe with the computer.
+- [ ] I can play a game of Tic Tac Toe with the computer.
 
-	- [ ] I can choose whether I want to play as X or O.
+- [ ] I can choose whether I want to play as X or O.
 
-	- [ ] My game will reset as soon as it's over so I can play again.
+- [ ] My game will reset as soon as it's over so I can play again.
 
-- Rules
+## Rules
 
-	- [Tic-Tac-Toe - Game Rules With Variants](https://www.thespruce.com/tic-tac-toe-game-rules-412170)
+- [Tic-Tac-Toe - Game Rules With Variants](https://www.thespruce.com/tic-tac-toe-game-rules-412170)
 
-- [ ] Settings
+## Settings
 
-- Player
+- [ ] store settings in memory
 
-	- name
+## Player
 
-	- mark
+- name
 
-		- X
+- mark
 
-		- O
+	- X
 
-- Board
+	- O
 
-	- 3 x 3 Grid
+## Board
 
-	- onClick
+- 3 x 3 Grid
 
-- Get blocking move
+- onClick
 
-- check winning combinations
+## Get blocking move
 
-- timer - ?
+## check winning combinations
 
-- Check valid move
+## timer - ?
 
-	- Box is empty
+## Check valid move
 
-	- Game is not finished
+- Box is empty
 
-- move
+- Game is not finished
 
-	- computer goes first - settings
+## move
 
-- Images
+- computer goes first - settings
 
-	- google-start
-![](assets/99C9BB62-20B6-4B9C-9563-B32164F8E374.png)
+## Images
 
-	- google-in-play
-![](assets/7959023E-47DD-485D-A1BB-1B53DEEEA0B6.png)
+- google-start
+![](assets/FC2A580E-12DB-4093-ACCE-F6897B895F4A.png)
 
-	- playtictactoe.org
-![](assets/7E7957E2-A99F-4BF5-93BF-5CB5CDD10E3E.png)
+- google-in-play
+![](assets/9F5F9E91-4AB9-4FFD-9955-D97A94B8E341.png)
 
-	- tic-tac-toe-glow
-![](assets/09E8D9F9-813C-4739-83DD-934A4461D021.png)
+- playtictactoe.org
+![](assets/5560E234-4A8B-4696-9BC3-DCC977906D5B.png)
+
+- tic-tac-toe-glow
+![](assets/CDB60A40-4496-4C89-93EF-F2816106A7CD.png)
 
