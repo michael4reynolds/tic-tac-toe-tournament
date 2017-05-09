@@ -8,7 +8,7 @@ let currentPlayer
 let moveCount = 0
 let waiting = false
 let gameOver = false
-let score = {Computer: 0, tie: 0}
+let score = {computer: 0, human: 0, tie: 0}
 const combos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 4, 8], [2, 4, 6], [0, 3, 6], [1, 4, 7], [2, 5, 8]]
 const board = new Array(9).fill('')
 
@@ -48,8 +48,8 @@ const legalMoves = arr => arr.reduce((a, e, i) => {
 }, [])
 
 const displayStats = () => {
-  p1Stats.innerText = score[player1.name]
-  p2Stats.innerText = score.Computer
+  p1Stats.innerText = score.human
+  p2Stats.innerText = score.computer
   ties.innerText = score.tie
 }
 
@@ -59,11 +59,16 @@ const checkForWin = () => combos.some(c =>
 const checkForDraw = () => moveCount === 9
 
 let checkGameOver = () => {
+  log(currentPlayer)
   let over = true
   if (checkForWin()) {
-    score[currentPlayer.name]++
+    log(currentPlayer.name)
+    if (currentPlayer.name === 'computer') {
+      score.computer++
+    } else {
+      score.human++
+    }
     displayStats()
-    log(score)
   } else if (checkForDraw()) {
     score.tie++
     displayStats()
@@ -121,22 +126,10 @@ const aiPlay = async () => {
 
 const applyGameSettings = () => {
   let mark = document.querySelector('[name=mark]:checked').value
-
-  let oldName = player1 !== undefined ? player1.name : ''
-  let oldScore = 0
   player1 = player(document.getElementById('name').value, mark === 'X' ? 'X' : 'O')
-  player2 = player('Computer', mark === 'X' ? 'O' : 'X')
+  player2 = player('computer', mark === 'X' ? 'O' : 'X')
 
   lblPlayer.innerText = player1.name
-  if (!!oldName) {
-    if (score[oldName] !== undefined) {
-      oldScore = score[oldName]
-    }
-    delete score[oldName]
-  }
-
-  if (score[player1.name] === undefined) score[player1.name] = oldScore
-  else score[player1.name] += oldScore
 }
 
 const startNewGame = () => {
@@ -163,9 +156,7 @@ const moveLoop = async e => {
 }
 
 const changeSettings = () => {
-  if (moveCount === 0 || gameOver) {
-    applyGameSettings()
-  }
+  applyGameSettings()
   startNewGame()
 }
 
