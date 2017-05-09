@@ -8,13 +8,17 @@ let currentPlayer
 let moveCount = 0
 let waiting = false
 let gameOver = false
+let score = {Computer: 0, tie: 0}
 const combos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 4, 8], [2, 4, 6], [0, 3, 6], [1, 4, 7], [2, 5, 8]]
 const board = new Array(9).fill('')
 
 // View
 const squares = Array.from(document.querySelectorAll('.game span'))
-const stats = document.querySelector('.player-stats')
-const btnStats = document.getElementById('apply-stats')
+const inputs = Array.from(document.querySelectorAll('input'))
+const lblPlayer = document.getElementById('player-label')
+const p1Stats = document.getElementById('p1-wins')
+const ties = document.getElementById('ties')
+const p2Stats = document.getElementById('p2-wins')
 
 // Utilities
 const getRandomInt = (min, max) => {
@@ -43,6 +47,12 @@ const legalMoves = arr => arr.reduce((a, e, i) => {
   return a
 }, [])
 
+const displayStats = () => {
+  p1Stats.innerText = score[player1.name]
+  p2Stats.innerText = score.Computer
+  ties.innerText = score.tie
+}
+
 const checkForWin = () => combos.some(c =>
   c.every(i => board[i] === currentPlayer.mark))
 
@@ -51,9 +61,13 @@ const checkForDraw = () => moveCount === 9
 let checkGameOver = () => {
   let over = true
   if (checkForWin()) {
-    stats.innerText = `${currentPlayer.name} wins!!!`
+    score[currentPlayer.name]++
+    displayStats()
+    log(score)
   } else if (checkForDraw()) {
-    stats.innerText = `Tie game`
+    score.tie++
+    displayStats()
+    log(score)
   } else {
     over = false
   }
@@ -93,7 +107,7 @@ const aiPlay = async () => {
   let winners = winningMoves(arr)
   if (winners.length) {
     play(winners[getRandomInt(0, winners.length)])
-    stats.innerText = `${currentPlayer.name} wins!!!`
+    displayStats()
   } else {
     arr = twoSquaresDone(nextPlayer())
     let blocks = winningMoves(arr)
@@ -107,9 +121,22 @@ const aiPlay = async () => {
 
 const applyGameSettings = () => {
   let mark = document.querySelector('[name=mark]:checked').value
-  log(mark)
+
+  let oldName = player1 !== undefined ? player1.name : ''
+  let oldScore = 0
   player1 = player(document.getElementById('name').value, mark === 'X' ? 'X' : 'O')
   player2 = player('Computer', mark === 'X' ? 'O' : 'X')
+
+  lblPlayer.innerText = player1.name
+  if (!!oldName) {
+    if (score[oldName] !== undefined) {
+      oldScore = score[oldName]
+    }
+    delete score[oldName]
+  }
+
+  if (score[player1.name] === undefined) score[player1.name] = oldScore
+  else score[player1.name] += oldScore
 }
 
 const startNewGame = () => {
@@ -118,7 +145,6 @@ const startNewGame = () => {
   currentPlayer = document.querySelector('[name=mark]:checked').value === 'X' ? player1 : player2
   moveCount = 0
   gameOver = false
-  stats.innerText = 'New Game'
   if (document.querySelector('[name=mark]:checked').value === 'X') return
   wait(600).then(() => moveRandom())
 }
@@ -136,13 +162,16 @@ const moveLoop = async e => {
   }
 }
 
+const changeSettings = () => {
+  if (moveCount === 0 || gameOver) {
+    applyGameSettings()
+  }
+  startNewGame()
+}
+
 // Events
 squares.forEach(el => el.onclick = moveLoop)
-btnStats.addEventListener('click', e => {
-  e.preventDefault()
-  applyGameSettings()
-  startNewGame()
-})
+inputs.forEach(el => el.onchange = changeSettings)
 
 // initialize
 function init() {
