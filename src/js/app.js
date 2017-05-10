@@ -53,16 +53,21 @@ const displayStats = () => {
   ties.innerText = score.tie
 }
 
-const checkForWin = () => combos.some(c =>
-  c.every(i => board[i] === currentPlayer.mark))
+let lastBoard = 0
+const checkForWin = () => combos.some((c, ci) => {
+  lastBoard = ci
+  return c.every(i => board[i] === currentPlayer.mark)
+})
 
 const checkForDraw = () => moveCount === 9
+
+const highlightWin = i => combos[i].forEach(c => squares[c].classList.add('winner'))
 
 let checkGameOver = () => {
   log(currentPlayer)
   let over = true
   if (checkForWin()) {
-    log(currentPlayer.name)
+    highlightWin(lastBoard)
     if (currentPlayer.name === 'computer') {
       score.computer++
     } else {
@@ -134,7 +139,10 @@ const applyGameSettings = () => {
 
 const startNewGame = () => {
   board.fill('')
-  squares.forEach(el => el.innerText = '')
+  squares.forEach(el => {
+    el.innerText = ''
+    el.classList.remove('winner')
+  })
   currentPlayer = document.querySelector('[name=mark]:checked').value === 'X' ? player1 : player2
   moveCount = 0
   gameOver = false
