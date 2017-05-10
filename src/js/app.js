@@ -13,6 +13,7 @@ const combos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 4, 8], [2, 4, 6], [0, 3, 6]
 const board = new Array(9).fill('')
 
 // View
+const formSettings = document.getElementById('settings')
 const squares = Array.from(document.querySelectorAll('.game span'))
 const inputs = Array.from(document.querySelectorAll('input'))
 const lblPlayer = document.getElementById('player-label')
@@ -171,6 +172,7 @@ const changeSettings = () => {
 // Events
 squares.forEach(el => el.onclick = moveLoop)
 inputs.forEach(el => el.onchange = changeSettings)
+formSettings.addEventListener('submit', e => e.preventDefault())
 
 // initialize
 function init() {
