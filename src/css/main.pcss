@@ -8,6 +8,8 @@
   --ebony-dream: {
     background-image: linear-gradient(to top, var(--ironside-gray) 0%, var(--ebony-clay) 100%)
   };
+  --happy-acid: {background-image: linear-gradient(to top, #37ecba 0%, #72afd3 100%)};
+  --heavy-rain: {background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%)};
   --body-fill: {
     @apply --premium-white;
     min-height: 100vh;
@@ -128,27 +130,33 @@ header {
     }
   }
   #settings {
+    @apply --heavy-rain;
     width: 18em;
-    margin: 0 auto;
+    margin: 10px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     #name {
-      width: 9em;
+      border-radius: 5px;
+      background-color: steelblue;
+      color: aliceblue;
     }
   }
   .player-stats {
+    @apply --happy-acid;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1.6em 1.6em;
     justify-items: center;
     align-items: center;
+    border-radius: 10px;
+    color: darkslategrey;
+    .label {
+      text-decoration: underline;
+    }
   }
   .winner {
     font-weight: 900;
     color: lawngreen;
   }
-}
-
-/***************************/
-
-@supports not (display:grid) {
-
 }
